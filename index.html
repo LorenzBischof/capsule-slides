@@ -14,7 +14,7 @@
   <body data-theme="dark">
     <div class="reveal">
       <div class="slides">
-        <section class="slide--hero" aria-labelledby="slide-1-title">
+        <section class="slide--hero" aria-labelledby="slide-1-title" data-background-color="var(--theme-background)">
           <div class="ambient ambient--one" aria-hidden="true"></div>
           <div class="ambient ambient--two" aria-hidden="true"></div>
 
@@ -33,7 +33,7 @@
           </footer>
         </section>
 
-        <section class="slide--namespace-flat" aria-labelledby="slide-2-title">
+        <section class="slide--namespace-flat" aria-labelledby="slide-2-title" data-background-color="var(--theme-background)">
           <div class="slide-heading slide-heading--center">
             <h2 id="slide-2-title">Namespaces have<br /><span>no hierarchy.</span></h2>
           </div>
@@ -52,7 +52,7 @@
 
         </section>
 
-        <section class="slide--sprawl" aria-labelledby="slide-3-title">
+        <section class="slide--sprawl" aria-labelledby="slide-3-title" data-background-color="var(--theme-background)">
           <div class="slide-heading slide-heading--center">
             <h2 id="slide-3-title">Capsule replaces<br /><span>cluster sprawl</span> with tenants.</h2>
           </div>
@@ -65,7 +65,7 @@
                 <div class="mini-cluster panel panel--cluster">D</div><div class="mini-cluster panel panel--cluster">E</div><div class="mini-cluster panel panel--cluster">F</div>
               </div>
             </div>
-            <div class="transform-arrow" aria-hidden="true"><span>→</span></div>
+            <div class="transform-arrow" aria-hidden="true"><span></span></div>
             <div class="shared-cluster panel panel--cluster">
               <div class="cluster-label shared-cluster__label">Shared cluster</div>
               <div class="tenant tenant--coral panel__item"><img class="tenant__mark" src="assets/capsule-mark.svg" alt="" /><b>Tenant Solar</b><span>solar-*</span></div>
@@ -79,7 +79,7 @@
           </footer>
         </section>
 
-        <section class="slide--tenant" aria-labelledby="slide-4-title">
+        <section class="slide--tenant" aria-labelledby="slide-4-title" data-background-color="var(--theme-background)">
           <div class="grid-field" aria-hidden="true"></div>
           <div class="slide-heading slide-heading--center">
             <h2 id="slide-4-title">Kubernetes gives you namespaces.<br />Capsule adds the <span>team layer.</span></h2>
@@ -132,7 +132,7 @@
 
         </section>
 
-        <section class="slide--roles" aria-labelledby="slide-5-title">
+        <section class="slide--roles" aria-labelledby="slide-5-title" data-background-color="var(--theme-background)">
           <div class="slide-heading slide-heading--center">
             <h2 id="slide-5-title">Capsule sets the <span>boundaries.</span><br />Teams build inside them.</h2>
           </div>
@@ -159,7 +159,7 @@
           </footer>
         </section>
 
-        <section class="slide--native" aria-labelledby="slide-6-title">
+        <section class="slide--native" aria-labelledby="slide-6-title" data-background-color="var(--theme-background)">
           <div class="two-col">
             <div class="slide-heading">
               <h2 id="slide-6-title">Self-service still feels like <span>Kubernetes.</span></h2>
@@ -173,41 +173,206 @@
               </div>
               <div class="terminal__stamp">✓ WITHIN TENANT BOUNDARIES</div>
             </div>
-          </div>
+          </div>        </section>
 
-          <footer class="slide-footer slide-footer--light">
-            <span>Same API. Same kubectl. Same workflows.</span>
-          </footer>
-        </section>
+        <section aria-label="Capsule Proxy" data-start-indexv="0" data-background-color="var(--theme-background)">
+          <section class="slide--proxy" aria-labelledby="slide-7-title" data-background-color="var(--theme-background)">
+            <div class="two-col">
+              <div class="slide-heading">
+                <h2 id="slide-7-title">Your tenant.<br /><span>Nothing else.</span></h2>
+                <p class="supporting-copy">Cluster-wide commands return tenant-scoped results.</p>
+              </div>
 
-        <section class="slide--proxy" aria-labelledby="slide-7-title">
-          <div class="two-col">
-            <div class="slide-heading">
-              <h2 id="slide-7-title">Your tenant.<br /><span>Nothing else.</span></h2>
-              <p class="supporting-copy">Cluster-wide commands return tenant-scoped results.</p>
+              <div class="terminal terminal--proxy" aria-label="Terminal showing Capsule Proxy returning only the Solar tenant namespaces">
+                <div class="terminal__bar"><i></i><i></i><i></i><span>terminal</span></div>
+                <div class="terminal__body">
+                  <p><b>$</b> kubectl get namespaces</p>
+                  <div class="terminal__table" aria-hidden="true">
+                    <div><span>NAME</span><span>STATUS</span></div>
+                    <div><strong>solar-production</strong><span>Active</span></div>
+                    <div><strong>solar-staging</strong><span>Active</span></div>
+                    <div><strong>solar-development</strong><span>Active</span></div>
+                  </div>
+                </div>
+                <div class="terminal__stamp">✓ OTHER TENANTS HIDDEN</div>
+              </div>
+            </div>          </section>
+
+          <section class="slide--proxy-step" aria-labelledby="slide-7a-title" data-brand-descriptor="Capsule Proxy" data-background-color="var(--theme-vertical-background)">
+            <div class="two-col">
+              <div class="slide-heading">
+                <h2 id="slide-7a-title">A cluster-scoped list is <span>all or nothing.</span></h2>
+                <p class="supporting-copy">Kubernetes RBAC can allow <em>list namespaces</em>, but it can't limit the result to just one tenant.</p>
+              </div>
+
+              <div class="proxy-visual proxy-rbac panel" aria-label="A ClusterRole granting list on namespaces returns every tenant's namespaces">
+                <div class="rbac-rule">
+                  <span>ClusterRole</span>
+                  <code>list namespaces</code>
+                </div>
+                <div class="proxy-visual__arrow" aria-hidden="true"></div>
+                <div class="rbac-result">
+                  <b>solar-*</b>
+                  <b>lunar-*</b>
+                  <b>nova-*</b>
+                  <b class="rbac-result--more">···</b>
+                </div>
+                <p>One permission returns every namespace in the cluster.</p>
+              </div>
             </div>
 
-            <div class="terminal terminal--proxy" aria-label="Terminal showing Capsule Proxy returning only the Solar tenant namespaces">
-              <div class="terminal__bar"><i></i><i></i><i></i><span>terminal</span></div>
-              <div class="terminal__body">
-                <p><b>$</b> kubectl get namespaces</p>
-                <div class="terminal__table" aria-hidden="true">
-                  <div><span>NAME</span><span>STATUS</span></div>
-                  <div><strong>solar-production</strong><span>Active</span></div>
-                  <div><strong>solar-staging</strong><span>Active</span></div>
-                  <div><strong>solar-development</strong><span>Active</span></div>
+            <footer class="slide-footer slide-footer--light">
+              <span>Capsule Proxy narrows this request in three steps.</span>
+            </footer>
+          </section>
+
+          <section class="slide--proxy-step" aria-labelledby="slide-7b-title" data-brand-descriptor="Capsule Proxy" data-background-color="var(--theme-vertical-background)">
+            <div class="two-col">
+              <div class="slide-heading">
+                <h2 id="slide-7b-title">Resolve the token to a <span>user.</span></h2>
+                <p class="supporting-copy">Capsule Proxy sends the bearer token to Kubernetes, which validates it and returns the caller's user and groups.</p>
+              </div>
+
+              <div class="proxy-visual proxy-auth-flow panel" aria-label="Kubectl sends a bearer token to Capsule Proxy, which validates it with the Kubernetes API and receives Alice's user and group identity">
+                <div class="auth-request">
+                  <span>kubectl request</span>
+                  <code>Bearer ••••••</code>
+                </div>
+                <div class="auth-request__arrow" aria-hidden="true"></div>
+                <div class="auth-exchange">
+                  <div class="auth-service auth-service--proxy">
+                    <img src="assets/capsule-mark.svg" alt="" />
+                    <b>Capsule Proxy</b>
+                  </div>
+                  <div class="auth-exchange__arrows" aria-hidden="true">
+                    <span><b>TokenReview</b></span>
+                    <span><b>user + groups</b></span>
+                  </div>
+                  <div class="auth-service auth-service--api">
+                    <img src="assets/kubernetes.svg" alt="" />
+                    <b>Kubernetes API</b>
+                  </div>
+                </div>
+                <div class="auth-identity panel__item">
+                  <div class="auth-identity__avatar" aria-hidden="true">A</div>
+                  <div>
+                    <span>Authenticated as</span>
+                    <code>alice@corp.example</code>
+                    <small>group: <b>solar-owners</b></small>
+                  </div>
                 </div>
               </div>
-              <div class="terminal__stamp">✓ OTHER TENANTS HIDDEN</div>
-            </div>
-          </div>
+            </div>          </section>
 
-          <footer class="slide-footer slide-footer--light">
-            <span>Standard kubectl. Tenant-safe visibility.</span>
-          </footer>
+          <section class="slide--proxy-step" aria-labelledby="slide-7c-title" data-brand-descriptor="Capsule Proxy" data-background-color="var(--theme-vertical-background)">
+            <div class="two-col">
+              <div class="slide-heading">
+                <h2 id="slide-7c-title">Map the user to <span>namespaces.</span></h2>
+                <p class="supporting-copy">Capsule combines namespaces from owned Tenants and any explicit grants.</p>
+              </div>
+
+              <div class="proxy-visual proxy-access-set panel" aria-label="The solar-owners group owns Tenant solar, producing an allowed set of three Solar namespaces; explicit grants can add other namespaces">
+                <div class="access-match panel__item">
+                  <code>solar-owners</code>
+                  <span aria-hidden="true"></span>
+                  <b>Tenant solar</b>
+                </div>
+                <div class="proxy-visual__arrow" aria-hidden="true"></div>
+                <div class="allowed-set">
+                  <span>Visible namespaces</span>
+                  <code>solar-production</code>
+                  <code>solar-staging</code>
+                  <code>solar-development</code>
+                </div>
+                <p class="access-grants"><b>+</b> explicit RoleBinding or ProxySettings grants</p>
+              </div>
+            </div>          </section>
+
+          <section class="slide--proxy-step" aria-labelledby="slide-7d-title" data-brand-descriptor="Capsule Proxy" data-background-color="var(--theme-vertical-background)">
+            <div class="two-col">
+              <div class="slide-heading">
+                <h2 id="slide-7d-title">Narrow the <span>request.</span></h2>
+                <p class="supporting-copy">The proxy turns the allowed names into a Kubernetes label selector and forwards the narrowed request.</p>
+              </div>
+
+              <div class="proxy-request-flow" aria-label="Capsule Proxy adds a selector for the caller's visible namespace names before forwarding the list request to the Kubernetes API server">
+                <div class="request-stage">
+                  <div class="request-line">
+                    <b>GET</b>
+                    <code>/api/v1/namespaces</code>
+                  </div>
+                </div>
+                <div class="request-transform" aria-hidden="true">
+                  <span></span>
+                  <b>Filter namespaces</b>
+                </div>
+                <div class="request-stage request-stage--narrowed">
+                  <div class="request-line">
+                    <b>GET</b>
+                    <code>/api/v1/namespaces</code>
+                  </div>
+                  <div class="request-selector">
+                    <code><span>?labelSelector=</span><strong>kubernetes.io/metadata.name in<br />(solar-production, solar-staging, …)</strong></code>
+                  </div>
+                </div>
+              </div>
+            </div>          </section>
+
+          <section class="slide--proxy-step" aria-labelledby="slide-7e-title" data-brand-descriptor="Capsule Proxy" data-background-color="var(--theme-vertical-background)">
+            <div class="two-col">
+              <div class="slide-heading">
+                <h2 id="slide-7e-title">Not only <span>namespaces.</span></h2>
+                <p class="supporting-copy">The same proxy also narrows supported cluster-scoped resources to what each tenant is allowed to use.</p>
+              </div>
+
+              <div class="proxy-visual proxy-resource-scope panel" aria-label="Capsule Proxy exposes the Solar tenant's Tenants, Nodes, StorageClasses, IngressClasses, PriorityClasses, RuntimeClasses, and PersistentVolumes">
+                <div class="resource-scope-head">
+                  <img src="assets/capsule-mark.svg" alt="" />
+                  <div>
+                    <span>Tenant Solar</span>
+                    <b>Visible resources</b>
+                  </div>
+                </div>
+                <div class="proxy-visual__arrow" aria-hidden="true"></div>
+                <div class="resource-scope-grid">
+                  <div class="resource-scope-item resource-scope-item--wide panel__item"><i></i><b>Tenants</b></div>
+                  <div class="resource-scope-item panel__item"><i></i><b>Nodes</b></div>
+                  <div class="resource-scope-item panel__item"><i></i><b>StorageClasses</b></div>
+                  <div class="resource-scope-item panel__item"><i></i><b>IngressClasses</b></div>
+                  <div class="resource-scope-item panel__item"><i></i><b>PriorityClasses</b></div>
+                  <div class="resource-scope-item panel__item"><i></i><b>RuntimeClasses</b></div>
+                  <div class="resource-scope-item panel__item"><i></i><b>PersistentVolumes</b></div>
+                </div>
+              </div>
+            </div>          </section>
+
+          <section class="slide--proxy-step" aria-labelledby="slide-7f-title" data-brand-descriptor="Capsule Proxy" data-background-color="var(--theme-vertical-background)">
+            <div class="two-col">
+              <div class="slide-heading">
+                <h2 id="slide-7f-title">Runs <span>without Capsule.</span></h2>
+                <p class="supporting-copy">The proxy is a standalone component. Capsule is optional.</p>
+              </div>
+
+              <div class="proxy-standalone" aria-label="Capsule Proxy forwards narrowed requests to any Kubernetes cluster, with no Capsule operator required">
+                <div class="standalone-node standalone-node--proxy">
+                  <img src="assets/capsule-mark.svg" alt="" />
+                  <b>Capsule Proxy</b>
+                </div>
+                <div class="standalone-arrow" aria-hidden="true"></div>
+                <div class="standalone-node">
+                  <img src="assets/kubernetes.svg" alt="" />
+                  <b>Any cluster</b>
+                </div>
+              </div>
+            </div>
+
+            <footer class="slide-footer slide-footer--light">
+              <span>Namespace filtering for any cluster — Capsule operator optional.</span>
+            </footer>
+          </section>
         </section>
 
-        <section class="slide--budget" aria-labelledby="slide-8-title">
+        <section class="slide--budget" aria-labelledby="slide-8-title" data-background-color="var(--theme-background)">
           <div class="two-col">
             <div class="slide-heading">
               <h2 id="slide-8-title">Give every tenant<br />a <span>shared budget.</span></h2>
@@ -231,7 +396,7 @@
           </footer>
         </section>
 
-        <section class="slide--guardrails" aria-labelledby="slide-9-title">
+        <section class="slide--guardrails" aria-labelledby="slide-9-title" data-background-color="var(--theme-background)">
           <div class="guardrail-lines" aria-hidden="true"></div>
           <div class="slide-heading slide-heading--center">
             <h2 id="slide-9-title">Guardrails follow every<br /><span>tenant namespace.</span></h2>
@@ -250,7 +415,7 @@
           </footer>
         </section>
 
-        <section class="slide--adopt" aria-labelledby="slide-10-title">
+        <section class="slide--adopt" aria-labelledby="slide-10-title" data-background-color="var(--theme-background)">
           <div class="two-col">
             <div class="slide-heading">
               <h2 id="slide-10-title">Native.<br />Declarative.<br /><span>Incremental.</span></h2>
@@ -267,7 +432,7 @@
           </footer>
         </section>
 
-        <section class="slide--cta" aria-labelledby="slide-11-title" data-brand-descriptor="CNCF Sandbox Project">
+        <section class="slide--cta" aria-labelledby="slide-11-title" data-brand-descriptor="CNCF Sandbox Project" data-background-color="var(--theme-background)">
           <div class="cta-orbit cta-orbit--one" aria-hidden="true"></div>
           <div class="cta-orbit cta-orbit--two" aria-hidden="true"></div>
           <div class="two-col cta-layout">

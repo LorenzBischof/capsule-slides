@@ -14,7 +14,16 @@
   --yellow: #f4d35e;
 
   /* Theme tokens: dark is the default deck theme. */
-  --theme-background: linear-gradient(135deg, #071827 0%, #102a43 60%, #173d5d 100%);
+  --theme-background: var(--ink);
+  --theme-vertical-background: var(--ink-deep);
+  /* A hair darker than --ink so the nested panel recedes a little further,
+     while still sitting one clear step above --ink-deep (the vertical bg). */
+  --theme-vertical-panel: #0d2338;
+  /* The one highlight surface for the vertical stack: a box that needs to stand
+     out from its neighbours (the forwarded request, the proxy node, a section
+     header). One step lighter than a panel — the emphasis is tonal, not a
+     colour accent, so the stack stays a single navy ladder. */
+  --theme-panel-emphasis: #1a384f;
   --theme-text: var(--white);
   --theme-muted: rgba(255, 255, 255, .72);
   --theme-subtle: rgba(255, 255, 255, .62);
@@ -58,6 +67,9 @@
 body[data-theme="light"] {
   color-scheme: light;
   --theme-background: var(--paper);
+  --theme-vertical-background: var(--paper);
+  --theme-vertical-panel: var(--white);
+  --theme-panel-emphasis: var(--blue-pale);
   --theme-text: var(--ink);
   --theme-muted: var(--muted);
   --theme-subtle: rgba(16, 42, 67, .62);
@@ -106,16 +118,28 @@ body {
   background: var(--ink-deep);
 }
 
-/* Reveal owns the <section> (position, display, transitions); we only paint it
-   full-canvas and let it host the pinned chrome and footer. */
+/* Reveal owns the <section> (position, display, transitions); we keep the
+   section itself transparent and declare the surface colour via
+   data-background-color (index.html) so Reveal paints it in its dedicated
+   .backgrounds layer. Painting the colour on the section instead makes the
+   fade transition crossfade the section's own opacity, exposing the parent
+   stack's lighter background between vertical slides. */
 .reveal .slides > section {
   height: 100%;
   color: var(--theme-text);
-  background: var(--theme-background);
   font-size: var(--body);
   text-align: left;
   isolation: isolate;
   overflow: hidden;
+}
+
+/* Keep the top slide of a vertical stack on the main deck background, then
+   drop its deeper slides onto a darker surface (see data-background-color in
+   index.html). Panels darken to match, so the light-blue cards don't pop
+   against the deeper background. */
+.reveal .slides > section > section:not(:first-child) {
+  height: 100%;
+  --panel-background: var(--theme-vertical-panel);
 }
 
 /* Author at the original 1440x810 size, then fill Reveal's fixed 1920x1080
@@ -155,6 +179,106 @@ body {
   border: 0;
   background: transparent;
   box-shadow: none;
+}
+
+/* Controls, progress bar, and the autoplay indicator stay dimmed until the
+   visitor moves the pointer (or drives with the keyboard); deck.js toggles
+   .deck-chrome-active, and they fade back out after a short idle delay. */
+.reveal .controls,
+.reveal .progress {
+  opacity: 0;
+  transition: opacity .3s ease;
+  pointer-events: none;
+}
+
+/* The autoplay ring stays faintly visible at rest so the deck reads as live,
+   then brightens with the rest of the chrome on activity. */
+.reveal .playback {
+  opacity: .2;
+  transition: opacity .3s ease;
+}
+
+body.deck-chrome-active .reveal .controls,
+body.deck-chrome-active .reveal .progress,
+body.deck-chrome-active .reveal .playback {
+  opacity: 1;
+}
+
+body.deck-chrome-active .reveal .controls {
+  pointer-events: auto;
+}
+
+/* Vertical-stack hint: a down chevron in the bottom-right corner, shown only
+   while another vertical slide sits below the current one so the deck reads as
+   continuing downward. Like the autoplay ring it stays faintly lit at rest and
+   brightens with the rest of the chrome on activity. It's a dedicated element
+   rather than Reveal's own down arrow because (a) Reveal keeps that arrow
+   "enabled" everywhere under loop:true, so it can't tell a stack's bottom from
+   its middle, and (b) Reveal re-evaluates and re-animates its arrow on every
+   slide change, which made the reused arrow flash. deck.js injects the element
+   and toggles .has-slide-below.
+
+   The three rules below mirror Reveal's own .controls / .navigate-down /
+   .controls-arrow geometry exactly (same 10px em base, same bottom-right
+   anchor, same two-bar chevron) so the hint sits pixel-for-pixel where Reveal's
+   real down arrow appears — the swap on activity reads as the same arrow. */
+.deck-below-hint {
+  position: absolute;
+  z-index: 11;
+  right: var(--r-controls-spacing, 12px);
+  bottom: var(--r-controls-spacing, 12px);
+  color: var(--theme-accent);
+  font-size: 10px;
+  opacity: 0;
+  transition: opacity .3s ease;
+  pointer-events: none;
+}
+
+.deck-below-hint__btn {
+  position: absolute;
+  right: 3.2em;
+  bottom: -1.4em;
+  padding-bottom: 1.4em;
+}
+
+.deck-below-hint__arrow {
+  position: relative;
+  display: block;
+  width: 3.6em;
+  height: 3.6em;
+  transform: rotate(-90deg);
+}
+
+.deck-below-hint__arrow::before,
+.deck-below-hint__arrow::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2.6em;
+  height: .5em;
+  border-radius: .25em;
+  background-color: currentColor;
+  transform-origin: .2em;
+  content: "";
+}
+
+.deck-below-hint__arrow::before {
+  transform: translate(.5em) translateY(1.55em) rotate(45deg);
+}
+
+.deck-below-hint__arrow::after {
+  transform: translate(.5em) translateY(1.55em) rotate(-45deg);
+}
+
+body.has-slide-below .deck-below-hint {
+  opacity: .45;
+}
+
+/* Once the visitor is active, Reveal's real controls (with their own down
+   arrow) take over, so the hint steps aside to avoid a duplicate arrow. This
+   rule follows the one above so it wins when both classes are present. */
+body.deck-chrome-active .deck-below-hint {
+  opacity: 0;
 }
 
 .reveal .controls {
@@ -514,9 +638,33 @@ h2 span {
 .transform-arrow {
   display: grid;
   place-items: center;
-  color: var(--theme-accent);
-  font-size: 72px;
-  font-weight: 300;
+}
+
+.transform-arrow span {
+  position: relative;
+  width: 72px;
+  height: 12px;
+}
+
+.transform-arrow span::before {
+  content: "";
+  position: absolute;
+  top: calc(50% - .5px);
+  right: 7px;
+  left: 0;
+  height: 1px;
+  background: var(--theme-divider);
+}
+
+.transform-arrow span::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 7px solid var(--theme-divider);
 }
 
 .shared-cluster {
@@ -870,6 +1018,660 @@ h2 span {
 .terminal__table strong {
   color: var(--code-text);
   font-weight: 650;
+}
+
+/* Capsule Proxy — deep dive (vertical, one subtopic per slide)
+   ----------------------------------------------------------- */
+
+/* Reuse the two-column framing of the parent proxy slide. */
+.slide--proxy-step .two-col {
+  position: absolute;
+  top: 50%;
+  right: var(--pad-x);
+  left: var(--pad-x);
+  grid-template-columns: 1fr minmax(460px, .8fr);
+  gap: 100.8px;
+  width: auto;
+  transform: translateY(-45%);
+}
+
+.slide--proxy-step .slide-heading {
+  margin-top: 0;
+}
+
+.supporting-copy em {
+  color: var(--theme-text);
+  font-style: normal;
+  font-weight: 700;
+}
+
+/* Hint on each slide that another vertical deep-dive sits beneath it. */
+.slide-more {
+  color: var(--theme-accent);
+  font-weight: 750;
+}
+
+/* Shared framing for the focused visual panel on the right column. */
+.proxy-visual {
+  padding: 40px;
+}
+
+.proxy-visual__arrow {
+  position: relative;
+  height: 28px;
+  margin: 18px 0;
+}
+
+.proxy-visual__arrow::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  bottom: 11px;
+  left: 50%;
+  width: 1px;
+  transform: translateX(-50%);
+  background: var(--theme-divider);
+}
+
+.proxy-visual__arrow::after {
+  content: "";
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-top: 7px solid var(--theme-divider);
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+}
+
+.proxy-visual code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* Problem — RBAC is all-or-nothing */
+.rbac-rule {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 22px 26px;
+  border-radius: var(--panel-inner-radius);
+  background: var(--theme-card-subtle);
+}
+
+.rbac-rule span {
+  color: var(--theme-accent-strong);
+  font-size: 14px;
+  font-weight: 840;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.rbac-rule code {
+  color: var(--theme-text);
+  font-size: 24px;
+}
+
+.rbac-result {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.rbac-result b {
+  padding: 18px 0;
+  border: 1px solid var(--theme-border-soft);
+  border-radius: 14px;
+  background: var(--theme-card-subtle);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 19px;
+  text-align: center;
+}
+
+.rbac-result--more {
+  color: var(--theme-accent);
+  letter-spacing: .08em;
+}
+
+.proxy-rbac > p {
+  margin: 24px 0 0;
+  color: var(--theme-muted);
+  font-size: 16px;
+  font-weight: 560;
+  line-height: 1.4;
+}
+
+/* Step 1 — authenticate. The layout reads top-to-bottom: the request enters
+   Capsule Proxy, Kubernetes validates it, and a trusted identity comes back. */
+.proxy-auth-flow {
+  padding: 34px 36px 36px;
+}
+
+.auth-request {
+  display: flex;
+  width: 126px;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  padding: 11px 10px;
+  border: 1px solid var(--theme-border-soft);
+  border-radius: 14px;
+  background: var(--theme-card-subtle);
+  text-align: center;
+}
+
+.auth-request span {
+  color: var(--theme-muted);
+  font-size: 14px;
+  font-weight: 780;
+}
+
+.auth-request code {
+  color: var(--theme-text);
+  font-size: 17px;
+}
+
+.auth-request__arrow {
+  position: relative;
+  width: 126px;
+  height: 35px;
+}
+
+.auth-request__arrow::before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  bottom: 11px;
+  left: 50%;
+  width: 1px;
+  transform: translateX(-50%);
+  background: var(--theme-divider);
+}
+
+.auth-request__arrow::after {
+  content: "";
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-top: 7px solid var(--theme-divider);
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+}
+
+.auth-exchange {
+  display: grid;
+  grid-template-columns: 126px 1fr 126px;
+  align-items: center;
+  gap: 14px;
+}
+
+.auth-service {
+  display: flex;
+  min-height: 116px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px 10px;
+  border: 1px solid var(--theme-border-soft);
+  border-radius: var(--panel-inner-radius);
+  background: var(--theme-card-subtle);
+  text-align: center;
+}
+
+.auth-service--proxy {
+  border-color: var(--theme-border);
+  background: var(--theme-panel-emphasis);
+}
+
+.auth-service img {
+  width: 42px;
+  height: 42px;
+}
+
+.auth-service b {
+  color: var(--theme-text);
+  font-size: 15px;
+  line-height: 1.15;
+}
+
+.auth-exchange__arrows {
+  display: grid;
+  gap: 18px;
+  color: var(--theme-muted);
+  font-size: 14px;
+  text-align: center;
+}
+
+.auth-exchange__arrows span {
+  position: relative;
+  padding-bottom: 7px;
+  background: linear-gradient(var(--theme-divider), var(--theme-divider)) left bottom / calc(100% - 7px) 1px no-repeat;
+  white-space: nowrap;
+}
+
+.auth-exchange__arrows span:first-child::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: -4px;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 7px solid var(--theme-divider);
+}
+
+.auth-exchange__arrows span:last-child {
+  padding-top: 7px;
+  padding-bottom: 0;
+  background-position: right top;
+}
+
+.auth-exchange__arrows span:last-child::before {
+  content: "";
+  position: absolute;
+  top: .25px;
+  left: 0;
+  transform: translateY(-50%);
+  border-top: 4px solid transparent;
+  border-right: 7px solid var(--theme-divider);
+  border-bottom: 4px solid transparent;
+}
+
+.auth-exchange__arrows b {
+  color: var(--theme-accent);
+  font-weight: 780;
+}
+
+.auth-identity {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 18px;
+  margin-top: 28px;
+  padding: 18px 22px;
+}
+
+.auth-identity__avatar {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--ink-deep);
+  background: var(--theme-accent);
+  font-size: 19px;
+  font-weight: 880;
+}
+
+.auth-identity > div:last-child {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: baseline;
+  gap: 5px 12px;
+}
+
+.auth-identity span {
+  grid-column: 1 / -1;
+  color: var(--theme-muted);
+  font-size: 12px;
+  font-weight: 820;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.auth-identity code {
+  color: var(--theme-text);
+  font-size: 17px;
+}
+
+.auth-identity small {
+  color: var(--theme-muted);
+  font-size: 13px;
+}
+
+.auth-identity small b {
+  color: var(--theme-accent);
+}
+
+/* Step 2 — resolve every access path to one concrete namespace set. */
+.access-match {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 24px;
+  text-align: center;
+}
+
+.access-match code {
+  color: var(--theme-accent);
+  font-size: 18px;
+}
+
+.access-match span {
+  position: relative;
+  width: 36px;
+  height: 12px;
+}
+
+.access-match span::before {
+  content: "";
+  position: absolute;
+  top: calc(50% - .5px);
+  right: 7px;
+  left: 0;
+  height: 1px;
+  background: var(--theme-divider);
+}
+
+.access-match span::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 7px solid var(--theme-divider);
+}
+
+.access-match b {
+  color: var(--theme-text);
+  font-size: 18px;
+}
+
+.allowed-set {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.allowed-set > span {
+  grid-column: 1 / -1;
+  margin-bottom: 2px;
+  color: var(--theme-accent-strong);
+  font-size: 14px;
+  font-weight: 840;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+
+.allowed-set code {
+  min-width: 0;
+  padding: 14px 5px;
+  border: 1px solid var(--theme-border-soft);
+  border-radius: 13px;
+  color: var(--theme-text);
+  background: var(--theme-card-subtle);
+  font-size: 12px;
+  text-align: center;
+}
+
+.access-grants {
+  margin: 18px 0 0;
+  color: var(--theme-muted);
+  font-size: 14px;
+  text-align: center;
+}
+
+.access-grants b {
+  color: var(--theme-accent);
+  font-size: 18px;
+}
+
+/* Step 3 — show the request transformation without implying a shell command. */
+.proxy-request-flow {
+  width: 100%;
+}
+
+/* Match the panel surface used across the vertical stack so these two request
+   cards read as the same kind of panel, not a lighter translucent card. */
+.request-stage {
+  padding: 22px 24px;
+  border: 1px solid var(--theme-border);
+  border-radius: 18px;
+  background: var(--panel-background);
+  box-shadow: var(--panel-shadow);
+}
+
+/* The forwarded ("narrowed") request is the result of the transform, so lift it
+   one tonal step above the incoming request panel. */
+.request-stage--narrowed {
+  background: var(--theme-panel-emphasis);
+}
+
+.request-line {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.request-line > b {
+  display: grid;
+  min-width: 64px;
+  height: 42px;
+  place-items: center;
+  border-radius: 11px;
+  color: var(--ink-deep);
+  background: var(--theme-accent);
+  font-size: 15px;
+  font-weight: 880;
+  letter-spacing: .08em;
+}
+
+.request-line code {
+  color: var(--theme-text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 21px;
+  font-weight: 650;
+}
+
+.request-transform {
+  display: flex;
+  min-height: 64px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--theme-accent-strong);
+  font-size: 15px;
+}
+
+.request-transform span {
+  position: relative;
+  width: 12px;
+  height: 32px;
+}
+
+.request-transform span::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  bottom: 10px;
+  left: 50%;
+  width: 1px;
+  transform: translateX(-50%);
+  background: var(--theme-divider);
+}
+
+.request-transform span::after {
+  content: "";
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-top: 7px solid var(--theme-divider);
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+}
+
+.request-selector {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--theme-border-soft);
+}
+
+.request-selector code {
+  display: grid;
+  gap: 4px;
+  color: var(--theme-text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 19px;
+  line-height: 1.4;
+}
+
+.request-selector code > span {
+  color: var(--theme-muted);
+  font-size: 15px;
+}
+
+.request-selector strong {
+  color: inherit;
+  font-weight: 650;
+}
+
+/* Beyond namespaces — summarize the existing, resource-specific proxy routes
+   without implying support for the alpha generic cluster-resource path. */
+.proxy-resource-scope {
+  padding: 32px 36px 36px;
+}
+
+.resource-scope-head {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 17px 20px;
+  border: 1px solid var(--theme-border);
+  border-radius: var(--panel-inner-radius);
+  background: var(--theme-panel-emphasis);
+}
+
+.resource-scope-head img {
+  width: 48px;
+  height: 48px;
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, .18));
+}
+
+.resource-scope-head div {
+  display: grid;
+  gap: 3px;
+}
+
+.resource-scope-head span {
+  color: var(--theme-accent-strong);
+  font-size: 13px;
+  font-weight: 840;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+
+.resource-scope-head b {
+  color: var(--theme-text);
+  font-size: 20px;
+  letter-spacing: -.025em;
+}
+
+.proxy-resource-scope .proxy-visual__arrow {
+  margin: 15px 0;
+}
+
+/* Standalone — the proxy forwards to any cluster, no operator required. Two
+   nodes and a connector, no outer panel. */
+.proxy-standalone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+}
+
+.standalone-arrow {
+  position: relative;
+  width: 56px;
+  height: 1px;
+  background: var(--theme-divider);
+}
+
+.standalone-arrow::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  border-left: 7px solid var(--theme-divider);
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+}
+
+.standalone-node {
+  display: flex;
+  min-width: 160px;
+  min-height: 160px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 24px 20px;
+  border: 1px solid var(--theme-border-soft);
+  border-radius: var(--panel-inner-radius);
+  background: var(--panel-background);
+  box-shadow: var(--panel-shadow);
+  text-align: center;
+}
+
+.standalone-node--proxy {
+  border-color: var(--theme-border);
+  background: var(--theme-panel-emphasis);
+}
+
+.standalone-node img {
+  width: 60px;
+  height: 60px;
+}
+
+.standalone-node b {
+  color: var(--theme-text);
+  font-size: 20px;
+  line-height: 1.15;
+  letter-spacing: -.02em;
+}
+
+.resource-scope-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.resource-scope-item {
+  display: flex;
+  min-width: 0;
+  min-height: 58px;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 15px;
+}
+
+.resource-scope-item--wide {
+  grid-column: 1 / -1;
+}
+
+.resource-scope-item i {
+  width: 9px;
+  height: 9px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--theme-accent);
+  box-shadow: 0 0 0 5px var(--theme-accent-faint);
+}
+
+.resource-scope-item b {
+  overflow: hidden;
+  color: var(--theme-text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 14px;
+  font-weight: 650;
+  letter-spacing: -.025em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Budget
