@@ -27,6 +27,7 @@ cp "${repo_root}/index.html" "${build_dir}/index.html"
 cp "${repo_root}/styles.css" "${build_dir}/${css_file}"
 cp "${repo_root}/deck.js" "${build_dir}/${js_file}"
 cp -R "${repo_root}/assets" "${build_dir}/assets"
+cp -R "${repo_root}/vendor" "${build_dir}/vendor"
 
 sed -i \
   -e "s|href=\"styles.css\"|href=\"${css_file}\"|" \

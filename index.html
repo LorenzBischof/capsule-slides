@@ -8,73 +8,81 @@
       content="Capsule — Kubernetes multi-tenancy for shared clusters. A self-running booth presentation."
     />
     <title>Capsule — One cluster. Many teams.</title>
+    <link rel="stylesheet" href="vendor/reveal/reveal.css" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body data-theme="dark">
-    <main class="deck" aria-label="Capsule conference booth presentation">
-      <header class="brand deck-brand">
-        <img src="assets/capsule-mark.svg" alt="" />
-        <span>Capsule</span>
-        <span class="brand__descriptor">Kubernetes multi-tenancy</span>
-      </header>
-      <div class="cncf-brand deck-cncf-brand" role="img" aria-label="Cloud Native Computing Foundation">
-        <img class="cncf-brand__dark" src="assets/cncf-white.svg" alt="" />
-        <img class="cncf-brand__light" src="assets/cncf-black.svg" alt="" />
-      </div>
+    <div class="reveal">
+      <div class="slides">
+        <section class="slide--hero" aria-labelledby="slide-1-title">
+          <div class="ambient ambient--one" aria-hidden="true"></div>
+          <div class="ambient ambient--two" aria-hidden="true"></div>
 
-      <section class="slide slide--hero is-active" aria-labelledby="slide-1-title">
-        <div class="ambient ambient--one"></div>
-        <div class="ambient ambient--two"></div>
-
-        <div class="hero-lockup">
-          <div class="hero-mark" aria-hidden="true">
-            <img src="assets/capsule-mark.svg" alt="" />
-          </div>
-          <div>
-            <h1 id="slide-1-title">One cluster.<br /><span>Many teams.</span></h1>
-            <p class="hero-subtitle">Self-service for developers.<br />Guardrails for platform teams.</p>
-          </div>
-        </div>
-
-        <footer class="slide-footer slide-footer--light">
-          <span>projectcapsule.dev</span>
-          <span>01 / 10</span>
-        </footer>
-      </section>
-
-      <section class="slide slide--sprawl" aria-labelledby="slide-2-title">
-        <div class="slide-heading">
-          <h2 id="slide-2-title">Capsule replaces<br /><span>cluster sprawl</span> with tenants.</h2>
-        </div>
-
-        <div class="sprawl-visual" aria-label="Six separate team clusters become three tenants in one shared cluster">
-          <div class="sprawl-side">
-            <p class="cluster-label sprawl-side__label">One cluster per team</p>
-            <div class="mini-clusters" aria-hidden="true">
-              <div class="mini-cluster panel panel--cluster">A</div><div class="mini-cluster panel panel--cluster">B</div><div class="mini-cluster panel panel--cluster">C</div>
-              <div class="mini-cluster panel panel--cluster">D</div><div class="mini-cluster panel panel--cluster">E</div><div class="mini-cluster panel panel--cluster">F</div>
+          <div class="hero-lockup">
+            <div class="hero-mark" aria-hidden="true">
+              <img src="assets/capsule-mark.svg" alt="" />
+            </div>
+            <div>
+              <h1 id="slide-1-title">One cluster.<br /><span>Many teams.</span></h1>
+              <p class="hero-subtitle">Self-service for developers.<br />Guardrails for platform teams.</p>
             </div>
           </div>
-          <div class="transform-arrow" aria-hidden="true"><span>→</span></div>
-          <div class="shared-cluster panel panel--cluster">
-            <div class="cluster-label shared-cluster__label">Shared cluster</div>
-            <div class="tenant tenant--coral panel__item"><img class="tenant__mark" src="assets/capsule-mark.svg" alt="" /><b>Tenant Solar</b><span>solar-*</span></div>
-            <div class="tenant tenant--mint panel__item"><img class="tenant__mark" src="assets/capsule-mark.svg" alt="" /><b>Tenant Lunar</b><span>lunar-*</span></div>
-            <div class="tenant tenant--blue panel__item"><img class="tenant__mark" src="assets/capsule-mark.svg" alt="" /><b>Tenant Nova</b><span>nova-*</span></div>
-          </div>
-        </div>
 
-        <footer class="slide-footer">
-          <span>Share infrastructure. Keep team boundaries.</span>
-          <span>02 / 10</span>
-        </footer>
-      </section>
+          <footer class="slide-footer slide-footer--light">
+            <span>projectcapsule.dev</span>
+          </footer>
+        </section>
 
-      <section class="slide slide--tenant" aria-labelledby="slide-3-title">
-        <div class="grid-field" aria-hidden="true"></div>
-        <div class="centered-stack">
+        <section class="slide--namespace-flat" aria-labelledby="slide-2-title">
           <div class="slide-heading slide-heading--center">
-            <h2 id="slide-3-title">Kubernetes gives you namespaces.<br />Capsule adds the <span>team layer.</span></h2>
+            <h2 id="slide-2-title">Namespaces have<br /><span>no hierarchy.</span></h2>
+          </div>
+
+          <div class="namespace-flat-visual" aria-label="Namespaces exist directly inside a flat shared cluster with no team hierarchy">
+            <div class="shared-cluster namespace-shared-cluster panel panel--cluster">
+              <div class="cluster-label shared-cluster__label">Shared cluster</div>
+              <div class="namespace-flat-card panel__item"><b>Namespace</b></div>
+              <div class="namespace-flat-card panel__item"><b>Namespace</b></div>
+              <div class="namespace-flat-card panel__item"><b>Namespace</b></div>
+              <div class="namespace-flat-card panel__item"><b>Namespace</b></div>
+              <div class="namespace-flat-card panel__item"><b>Namespace</b></div>
+              <div class="namespace-flat-card namespace-flat-card--more panel__item" aria-label="More namespaces"><b>···</b></div>
+            </div>
+          </div>
+
+        </section>
+
+        <section class="slide--sprawl" aria-labelledby="slide-3-title">
+          <div class="slide-heading slide-heading--center">
+            <h2 id="slide-3-title">Capsule replaces<br /><span>cluster sprawl</span> with tenants.</h2>
+          </div>
+
+          <div class="sprawl-visual" aria-label="Six separate team clusters become three tenants in one shared cluster">
+            <div class="sprawl-side">
+              <p class="cluster-label sprawl-side__label">One cluster per team</p>
+              <div class="mini-clusters" aria-hidden="true">
+                <div class="mini-cluster panel panel--cluster">A</div><div class="mini-cluster panel panel--cluster">B</div><div class="mini-cluster panel panel--cluster">C</div>
+                <div class="mini-cluster panel panel--cluster">D</div><div class="mini-cluster panel panel--cluster">E</div><div class="mini-cluster panel panel--cluster">F</div>
+              </div>
+            </div>
+            <div class="transform-arrow" aria-hidden="true"><span>→</span></div>
+            <div class="shared-cluster panel panel--cluster">
+              <div class="cluster-label shared-cluster__label">Shared cluster</div>
+              <div class="tenant tenant--coral panel__item"><img class="tenant__mark" src="assets/capsule-mark.svg" alt="" /><b>Tenant Solar</b><span>solar-*</span></div>
+              <div class="tenant tenant--mint panel__item"><img class="tenant__mark" src="assets/capsule-mark.svg" alt="" /><b>Tenant Lunar</b><span>lunar-*</span></div>
+              <div class="tenant tenant--blue panel__item"><img class="tenant__mark" src="assets/capsule-mark.svg" alt="" /><b>Tenant Nova</b><span>nova-*</span></div>
+            </div>
+          </div>
+
+          <footer class="slide-footer">
+            <span>Share infrastructure. Keep team boundaries.</span>
+          </footer>
+        </section>
+
+        <section class="slide--tenant" aria-labelledby="slide-4-title">
+          <div class="grid-field" aria-hidden="true"></div>
+          <div class="slide-heading slide-heading--center">
+            <h2 id="slide-4-title">Kubernetes gives you namespaces.<br />Capsule adds the <span>team layer.</span></h2>
           </div>
 
           <div class="tenant-layer-map" aria-label="Multiple Capsule tenants, each containing their own development, staging, and production namespaces">
@@ -121,17 +129,12 @@
               </div>
             </div>
           </div>
-        </div>
 
-        <footer class="slide-footer slide-footer--light slide-footer--number-only">
-          <span>03 / 10</span>
-        </footer>
-      </section>
+        </section>
 
-      <section class="slide slide--roles" aria-labelledby="slide-4-title">
-        <div class="centered-stack">
+        <section class="slide--roles" aria-labelledby="slide-5-title">
           <div class="slide-heading slide-heading--center">
-            <h2 id="slide-4-title">Capsule sets the <span>boundaries.</span><br />Teams build inside them.</h2>
+            <h2 id="slide-5-title">Capsule sets the <span>boundaries.</span><br />Teams build inside them.</h2>
           </div>
 
           <div class="role-flow">
@@ -150,164 +153,161 @@
               <span>namespaces, workloads, releases</span>
             </article>
           </div>
-        </div>
 
-        <footer class="slide-footer">
-          <span>Delegation without handing out cluster-admin.</span>
-          <span>04 / 10</span>
-        </footer>
-      </section>
+          <footer class="slide-footer">
+            <span>Delegation without handing out cluster-admin.</span>
+          </footer>
+        </section>
 
-      <section class="slide slide--native" aria-labelledby="slide-5-title">
-        <div class="native-layout">
-          <div class="slide-heading">
-            <h2 id="slide-5-title">Self-service still feels like <span>Kubernetes.</span></h2>
-            <p class="supporting-copy">No custom developer portal or new CLI required.</p>
-          </div>
-          <div class="terminal" aria-label="Terminal showing a tenant owner creating a namespace with kubectl">
-            <div class="terminal__bar"><i></i><i></i><i></i><span>terminal</span></div>
-            <div class="terminal__body">
-              <p><b>$</b> kubectl create namespace<br /><strong>solar-production</strong></p>
-              <p class="terminal__result">namespace/solar-production<br />created</p>
+        <section class="slide--native" aria-labelledby="slide-6-title">
+          <div class="two-col">
+            <div class="slide-heading">
+              <h2 id="slide-6-title">Self-service still feels like <span>Kubernetes.</span></h2>
+              <p class="supporting-copy">No custom developer portal or new CLI required.</p>
             </div>
-            <div class="terminal__stamp">✓ WITHIN TENANT BOUNDARIES</div>
-          </div>
-        </div>
-
-        <footer class="slide-footer slide-footer--light">
-          <span>Same API. Same kubectl. Same workflows.</span>
-          <span>05 / 10</span>
-        </footer>
-      </section>
-
-      <section class="slide slide--proxy" aria-labelledby="slide-6-title">
-        <div class="native-layout">
-          <div class="slide-heading">
-            <h2 id="slide-6-title">Your tenant.<br /><span>Nothing else.</span></h2>
-            <p class="supporting-copy">Cluster-wide commands return tenant-scoped results.</p>
-          </div>
-
-          <div class="terminal terminal--proxy" aria-label="Terminal showing Capsule Proxy returning only the Solar tenant namespaces">
-            <div class="terminal__bar"><i></i><i></i><i></i><span>terminal</span></div>
-            <div class="terminal__body">
-              <p><b>$</b> kubectl get namespaces</p>
-              <div class="terminal__table" aria-hidden="true">
-                <div><span>NAME</span><span>STATUS</span></div>
-                <div><strong>solar-production</strong><span>Active</span></div>
-                <div><strong>solar-staging</strong><span>Active</span></div>
-                <div><strong>solar-development</strong><span>Active</span></div>
+            <div class="terminal" aria-label="Terminal showing a tenant owner creating a namespace with kubectl">
+              <div class="terminal__bar"><i></i><i></i><i></i><span>terminal</span></div>
+              <div class="terminal__body">
+                <p><b>$</b> kubectl create namespace<br /><strong>solar-production</strong></p>
+                <p class="terminal__result">namespace/solar-production<br />created</p>
               </div>
+              <div class="terminal__stamp">✓ WITHIN TENANT BOUNDARIES</div>
             </div>
-            <div class="terminal__stamp">✓ OTHER TENANTS HIDDEN</div>
           </div>
-        </div>
 
-        <footer class="slide-footer slide-footer--light">
-          <span>Standard kubectl. Tenant-safe visibility.</span>
-          <span>06 / 10</span>
-        </footer>
-      </section>
+          <footer class="slide-footer slide-footer--light">
+            <span>Same API. Same kubectl. Same workflows.</span>
+          </footer>
+        </section>
 
-      <section class="slide slide--budget" aria-labelledby="slide-7-title">
-        <div class="slide-heading">
-          <h2 id="slide-7-title">Give every tenant<br />a <span>shared budget.</span></h2>
-          <p class="supporting-copy">Manage CPU, memory, storage,<br />and custom resources across its namespaces.</p>
-        </div>
+        <section class="slide--proxy" aria-labelledby="slide-7-title">
+          <div class="two-col">
+            <div class="slide-heading">
+              <h2 id="slide-7-title">Your tenant.<br /><span>Nothing else.</span></h2>
+              <p class="supporting-copy">Cluster-wide commands return tenant-scoped results.</p>
+            </div>
 
-        <div class="budget-board panel" aria-label="A tenant resource budget shared by development, staging, and production namespaces">
-          <div class="budget-board__head"><span>TENANT, SOLAR</span><b>64%</b> used</div>
-          <div class="meter"><i style="--used:64%"></i></div>
-          <div class="budget-items">
-            <div class="panel__item"><i class="dot dot--coral"></i><span>production</span><b>36%</b></div>
-            <div class="panel__item"><i class="dot dot--mint"></i><span>staging</span><b>18%</b></div>
-            <div class="panel__item"><i class="dot dot--blue"></i><span>development</span><b>10%</b></div>
+            <div class="terminal terminal--proxy" aria-label="Terminal showing Capsule Proxy returning only the Solar tenant namespaces">
+              <div class="terminal__bar"><i></i><i></i><i></i><span>terminal</span></div>
+              <div class="terminal__body">
+                <p><b>$</b> kubectl get namespaces</p>
+                <div class="terminal__table" aria-hidden="true">
+                  <div><span>NAME</span><span>STATUS</span></div>
+                  <div><strong>solar-production</strong><span>Active</span></div>
+                  <div><strong>solar-staging</strong><span>Active</span></div>
+                  <div><strong>solar-development</strong><span>Active</span></div>
+                </div>
+              </div>
+              <div class="terminal__stamp">✓ OTHER TENANTS HIDDEN</div>
+            </div>
           </div>
-          <p>One limit, flexible use across namespaces</p>
-        </div>
 
-        <footer class="slide-footer">
-          <span>Teams get flexibility without becoming noisy neighbors.</span>
-          <span>07 / 10</span>
-        </footer>
-      </section>
+          <footer class="slide-footer slide-footer--light">
+            <span>Standard kubectl. Tenant-safe visibility.</span>
+          </footer>
+        </section>
 
-      <section class="slide slide--guardrails" aria-labelledby="slide-8-title">
-        <div class="guardrail-lines" aria-hidden="true"></div>
-        <div class="centered-stack">
+        <section class="slide--budget" aria-labelledby="slide-8-title">
+          <div class="two-col">
+            <div class="slide-heading">
+              <h2 id="slide-8-title">Give every tenant<br />a <span>shared budget.</span></h2>
+              <p class="supporting-copy">Manage CPU, memory and storage limits<br />across tenant namespaces.</p>
+            </div>
+
+            <div class="budget-board panel" aria-label="A tenant resource budget shared by development, staging, and production namespaces">
+              <div class="budget-board__head"><span>TENANT SOLAR</span><b>64%</b> used</div>
+              <div class="meter"><i style="--used:64%"></i></div>
+              <div class="budget-items">
+                <div class="panel__item"><i class="dot dot--coral"></i><span>production</span><b>36%</b></div>
+                <div class="panel__item"><i class="dot dot--mint"></i><span>staging</span><b>18%</b></div>
+                <div class="panel__item"><i class="dot dot--blue"></i><span>development</span><b>10%</b></div>
+              </div>
+              <p>One limit, flexible use across namespaces</p>
+            </div>
+          </div>
+
+          <footer class="slide-footer">
+            <span>Teams get flexibility without becoming noisy neighbors.</span>
+          </footer>
+        </section>
+
+        <section class="slide--guardrails" aria-labelledby="slide-9-title">
+          <div class="guardrail-lines" aria-hidden="true"></div>
           <div class="slide-heading slide-heading--center">
-            <h2 id="slide-8-title">Guardrails follow every<br /><span>tenant namespace.</span></h2>
+            <h2 id="slide-9-title">Guardrails follow every<br /><span>tenant namespace.</span></h2>
           </div>
 
           <div class="guardrail-grid">
             <div class="guardrail-card panel"><svg viewBox="0 0 48 48"><path d="M24 4 40 10v12c0 10-6 18-16 22C14 40 8 32 8 22V10Z"/><path d="m16 24 5 5 11-12"/></svg><b>Admission rules</b><span>Enforce workload policy</span></div>
             <div class="guardrail-card panel"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="17"/><path d="M7 24h34M24 7c6 5 9 11 9 17s-3 12-9 17c-6-5-9-11-9-17s3-12 9-17Z"/></svg><b>Networks</b><span>Distribute safe defaults</span></div>
-            <div class="guardrail-card panel"><svg viewBox="0 0 48 48"><path d="m9 15 15-8 15 8-15 8ZM9 24l15 8 15-8M9 33l15 8 15-8"/></svg><b>Classes</b><span>Allow storage & runtime options</span></div>
+            <div class="guardrail-card panel"><svg viewBox="0 0 48 48"><path d="m9 15 15-8 15 8-15 8ZM9 24l15 8 15-8M9 33l15 8 15-8"/></svg><b>Classes</b><span>Allow storage &amp; runtime options</span></div>
             <div class="guardrail-card panel"><svg viewBox="0 0 48 48"><rect x="7" y="9" width="34" height="30" rx="4"/><path d="M7 18h34M15 14h.1M21 14h.1M14 26h20M14 32h13"/></svg><b>Registries</b><span>Control image sources</span></div>
             <div class="guardrail-card panel"><svg viewBox="0 0 48 48"><rect x="7" y="9" width="34" height="12" rx="3"/><rect x="7" y="27" width="34" height="12" rx="3"/><path d="M13 15h.1M13 33h.1M20 15h13M20 33h13"/></svg><b>Nodes</b><span>Place workloads by pool</span></div>
           </div>
-        </div>
 
-        <footer class="slide-footer slide-footer--light">
-          <span>Ownership, resources, and policy stay consistent as teams grow.</span>
-          <span>08 / 10</span>
-        </footer>
-      </section>
+          <footer class="slide-footer slide-footer--light">
+            <span>Ownership, resources, and policy stay consistent as teams grow.</span>
+          </footer>
+        </section>
 
-      <section class="slide slide--adopt" aria-labelledby="slide-9-title">
-        <div class="adopt-layout">
-          <div class="slide-heading">
-            <h2 id="slide-9-title">Native.<br />Declarative.<br /><span>Incremental.</span></h2>
-          </div>
-          <div class="adopt-list">
-            <div><strong>01</strong><p><b>Kubernetes-native</b><span>No extra management layer or custom binaries.</span></p></div>
-            <div><strong>02</strong><p><b>GitOps-ready</b><span>Manage tenants like any other Kubernetes resource.</span></p></div>
-            <div><strong>03</strong><p><b>Adopt gradually</b><span>Only selected namespaces need to join a tenant.</span></p></div>
-          </div>
-        </div>
-
-        <footer class="slide-footer slide-footer--light">
-          <span>Add multi-tenancy without replacing Kubernetes.</span>
-          <span>09 / 10</span>
-        </footer>
-      </section>
-
-      <section class="slide slide--cta" aria-labelledby="slide-10-title" data-brand-descriptor="CNCF Sandbox Project">
-        <div class="cta-orbit cta-orbit--one" aria-hidden="true"></div>
-        <div class="cta-orbit cta-orbit--two" aria-hidden="true"></div>
-        <div class="cta-layout">
-          <div>
-            <h2 id="slide-10-title">Start with<br /><span>one Tenant.</span></h2>
-            <p class="cta-copy">Open source, Kubernetes-native, GitOps-ready</p>
-            <div class="cta-links">
-              <span>projectcapsule.dev</span>
-              <span>github.com/projectcapsule</span>
+        <section class="slide--adopt" aria-labelledby="slide-10-title">
+          <div class="two-col">
+            <div class="slide-heading">
+              <h2 id="slide-10-title">Native.<br />Declarative.<br /><span>Incremental.</span></h2>
+            </div>
+            <div class="adopt-list">
+              <div><strong>01</strong><p><b>Kubernetes-native</b><span>No extra management layer or custom binaries.</span></p></div>
+              <div><strong>02</strong><p><b>GitOps-ready</b><span>Manage tenants like any other Kubernetes resource.</span></p></div>
+              <div><strong>03</strong><p><b>Adopt gradually</b><span>Only selected namespaces need to join a tenant.</span></p></div>
             </div>
           </div>
-          <div class="qr-card">
-            <img src="assets/projectcapsule-qr.svg" alt="QR code linking to projectcapsule.dev" />
-            <b>Explore Capsule</b>
-            <span>Docs, Quickstart, Live demo</span>
+
+          <footer class="slide-footer slide-footer--light">
+            <span>Add multi-tenancy without replacing Kubernetes.</span>
+          </footer>
+        </section>
+
+        <section class="slide--cta" aria-labelledby="slide-11-title" data-brand-descriptor="CNCF Sandbox Project">
+          <div class="cta-orbit cta-orbit--one" aria-hidden="true"></div>
+          <div class="cta-orbit cta-orbit--two" aria-hidden="true"></div>
+          <div class="two-col cta-layout">
+            <div>
+              <h2 id="slide-11-title">Start with<br /><span>one Tenant.</span></h2>
+              <p class="cta-copy">Open source, Kubernetes-native, GitOps-ready</p>
+              <div class="cta-links">
+                <span>projectcapsule.dev</span>
+                <span>github.com/projectcapsule</span>
+              </div>
+            </div>
+            <div class="qr-card">
+              <img src="assets/projectcapsule-qr.svg" alt="QR code linking to projectcapsule.dev" />
+              <b>Explore Capsule</b>
+              <span>Docs, Quickstart, Live demo</span>
+            </div>
           </div>
-        </div>
 
-        <footer class="slide-footer slide-footer--light">
-          <span>A multi-tenancy and policy-based framework for Kubernetes.</span>
-          <span>10 / 10</span>
-        </footer>
-      </section>
-    </main>
-
-    <div class="controls" aria-label="Presentation controls">
-      <button class="control control--prev" type="button" aria-label="Previous slide">←</button>
-      <button class="control control--play" type="button" aria-label="Pause automatic playback" aria-pressed="true">
-        <span class="pause-icon">Ⅱ</span><span class="play-icon">▶</span>
-      </button>
-      <button class="control control--next" type="button" aria-label="Next slide">→</button>
-      <button class="control control--fullscreen" type="button" aria-label="Enter fullscreen">⛶</button>
+          <footer class="slide-footer slide-footer--light">
+            <span>A multi-tenancy and policy-based framework for Kubernetes.</span>
+          </footer>
+        </section>
+      </div>
     </div>
-    <div class="progress" aria-hidden="true"><i></i></div>
-    <div class="slide-announcer" aria-live="polite" aria-atomic="true"></div>
 
+    <template id="deck-chrome">
+      <div class="deck-chrome" aria-hidden="true">
+        <header class="brand">
+          <img src="assets/capsule-mark.svg" alt="" />
+          <span>Capsule</span>
+          <span class="brand__descriptor">Kubernetes multi-tenancy</span>
+        </header>
+        <div class="cncf-brand" role="img" aria-label="Cloud Native Computing Foundation">
+          <img class="cncf-brand__dark" src="assets/cncf-white.svg" alt="" />
+          <img class="cncf-brand__light" src="assets/cncf-black.svg" alt="" />
+        </div>
+      </div>
+    </template>
+
+    <script src="vendor/reveal/reveal.js"></script>
     <script src="deck.js"></script>
   </body>
 </html>
