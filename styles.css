@@ -1674,6 +1674,42 @@ h2 span {
   white-space: nowrap;
 }
 
+/* Integrations — standard tools proxy impersonated requests and get a
+   correctly-scoped view. Tool chips reuse the resource-scope grid; the outcome
+   sits in the single emphasis box. */
+.proxy-integrations .tool-icon {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+  /* Monochrome marks (kubectl terminal, Lens symbol) render in the accent via
+     currentColor; the Headlamp <img> carries its own brand colours. */
+  color: var(--theme-accent);
+}
+
+.proxy-integrations .integrations-result {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 16px 20px;
+  border: 1px solid var(--theme-border);
+  border-radius: var(--panel-inner-radius);
+  background: var(--theme-panel-emphasis);
+  text-align: center;
+}
+
+.proxy-integrations .integrations-result img {
+  width: 34px;
+  height: 34px;
+}
+
+.proxy-integrations .integrations-result span {
+  color: var(--theme-text);
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -.02em;
+}
+
 /* Budget
    ------ */
 
