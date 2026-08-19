@@ -457,6 +457,33 @@
           </footer>
         </section>
 
+        <section class="slide--auth" aria-labelledby="slide-9a-title" data-background-color="var(--theme-background)">
+          <div class="slide-heading slide-heading--center">
+            <h2 id="slide-9a-title">Uses standard<br /><span>Kubernetes authentication.</span></h2>
+          </div>
+
+          <div class="role-flow">
+            <article class="role-card panel">
+              <p>OIDC PROVIDER</p>
+              <h3>Identity</h3>
+              <span>Authenticates users</span>
+            </article>
+            <div class="capsule-gate" aria-label="Kubernetes API Server validates tokens">
+              <img src="assets/kubernetes.svg" alt="" style="width: 64px;" />
+              <b style="color: var(--theme-text);">API Server</b>
+            </div>
+            <article class="role-card panel" style="background: var(--theme-panel-emphasis);">
+              <p>CAPSULE</p>
+              <h3>Authorization</h3>
+              <span>Enforces tenant boundaries</span>
+            </article>
+          </div>
+
+          <footer class="slide-footer slide-footer--light">
+            <span>Capsule uses standard Kubernetes groups. Gangplank optionally helps with OIDC kubectl login.</span>
+          </footer>
+        </section>
+
         <section class="slide--adopt" aria-labelledby="slide-10-title" data-background-color="var(--theme-background)">
           <div class="two-col">
             <div class="slide-heading">
@@ -471,6 +498,59 @@
 
           <footer class="slide-footer slide-footer--light">
             <span>Add multi-tenancy without replacing Kubernetes.</span>
+          </footer>
+        </section>
+
+        <section class="slide--integrations" aria-labelledby="slide-10a-title" data-background-color="var(--theme-background)">
+          <div class="slide-heading slide-heading--center">
+            <h2 id="slide-10a-title">Works with your<br /><span>Ecosystem.</span></h2>
+          </div>
+
+          <div class="integrations-grid">
+            <div class="integration-item">
+              <img src="assets/argo.svg" alt="" />
+              <span>ArgoCD</span>
+            </div>
+            <div class="integration-item">
+              <img src="assets/envoy-gateway.svg" alt="" />
+              <span>Envoy-Gateway</span>
+            </div>
+            <div class="integration-item">
+              <img src="assets/eso.svg" alt="" />
+              <span>External Secrets</span>
+            </div>
+            <div class="integration-item">
+              <img src="assets/headlamp.svg" alt="" />
+              <span>Headlamp</span>
+            </div>
+            <div class="integration-item">
+              <img src="assets/kyverno.svg" alt="" />
+              <span>Kyverno</span>
+            </div>
+            <div class="integration-item">
+              <img src="assets/logo-white-icon.png" alt="" />
+              <span>OpenCost</span>
+            </div>
+            <div class="integration-item">
+              <img src="assets/openshift.svg" alt="" />
+              <span>Openshift</span>
+            </div>
+            <div class="integration-item">
+              <img src="assets/rancher-icon.svg" alt="" />
+              <span>Rancher</span>
+            </div>
+            <div class="integration-item">
+              <img src="assets/teleport.png" alt="" />
+              <span>Teleport</span>
+            </div>
+            <div class="integration-item">
+              <img src="assets/velero.svg" alt="" />
+              <span>Velero</span>
+            </div>
+          </div>
+
+          <footer class="slide-footer slide-footer--light">
+            <span>Capsule works well with other CNCF Kubernetes based solutions.</span>
           </footer>
         </section>
 

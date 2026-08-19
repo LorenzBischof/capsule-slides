@@ -89,8 +89,9 @@ connector arrows/dividers, and accent words in headings. Accent colour never fil
 or a box background. Keep it sparse — it earns attention precisely because surfaces stay
 neutral navy.
 
-## Adding or changing a panel — checklist
+## Adding a new slide or panel — checklist
 
+- New top-level slide? → Add its `.slide--<name> .slide-body` class to the flex layout rule in `styles.css` so `deck.js` perfectly centers its content vertically.
 - Reference `--theme-*` tokens; no literal hex in slide rules.
 - New card → use the `.panel` surface (`--panel-background` / `--theme-border` /
   `--panel-shadow`). It inherits the correct tier automatically.

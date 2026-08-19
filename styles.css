@@ -165,7 +165,9 @@ body {
 .slide--namespace-flat .slide-body,
 .slide--tenant .slide-body,
 .slide--roles .slide-body,
-.slide--guardrails .slide-body {
+.slide--guardrails .slide-body,
+.slide--integrations .slide-body,
+.slide--auth .slide-body {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1868,6 +1870,39 @@ h2 span {
   color: var(--theme-muted);
   font-size: 14.4px;
   line-height: 1.3;
+}
+
+/* Integrations
+   ------------ */
+
+.integrations-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 60px 20px;
+  width: 1300px;
+  margin: 100px auto 0;
+}
+
+.integration-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.integration-item img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  /* Add a subtle drop shadow to make logos stand out professionally,
+     and increase brightness slightly for dark mode legibility */
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4));
+}
+
+.integration-item span {
+  font-size: 21.6px;
+  font-weight: 650;
+  color: var(--theme-text);
+  letter-spacing: -0.01em;
 }
 
 /* Adoption
